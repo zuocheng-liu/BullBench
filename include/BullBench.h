@@ -1,0 +1,8 @@
+#ifndef BULLBENCH_BULLBENCH_H
+#define BULLBENCH_BULLBENCH_H
+
+#define PROGRAM_VERSION "1.0"
+#define PROGRAM_NAME "BoolBench"
+
+
+#endif
