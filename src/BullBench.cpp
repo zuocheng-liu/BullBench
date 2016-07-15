@@ -40,7 +40,7 @@ void getUriAccordingToRegExp(regex_t& regexCompiled, std::string& line, std::str
     const char * str = line.c_str();
     if (regexec(&regexCompiled, str, maxGroups, groupArray, 0) == 0) {
         for (uint32_t g = 0; g < maxGroups; g++) {
-            if (groupArray[g].rm_so == (size_t)-1) {
+            if (groupArray[g].rm_so == -1) {
                 break; // No more groups
             }
             dollar[1] = '0' + g;
@@ -59,21 +59,28 @@ int main(int argc, char **argv) {
     Settings settings;
     settings.processParams(argc, argv);
     std::queue<std::string> requestQueue;
-    
+      
+    std::ifstream sourceFile(settings.fileName.c_str());
+    if (! sourceFile.is_open()) {
+        std::cerr<<"Can not open file:" << settings.fileName << std::endl;
+        exit(-1);
+    }
+
+    int count = 0;
+    uint32_t bufferSize = 2 * settings.threadNum;
     ThreadPool threadPool;
     for (int i = settings.threadNum; i > 0; --i) {
         threadPool.addThread(new BullBenchThread(settings, requestQueue));
     }
     threadPool.startAll();
-       
-    int count = 0;
-    uint32_t bufferSize = 2 * settings.threadNum;
-    std::ifstream sourceFile(settings.fileName.c_str());
+    
     while( ! sourceFile.eof() ) {
         std::string line;
         getline(sourceFile, line);
+        if (line.empty()) {
+            continue;
+        }
         std::string requestUri;
-        
         switch (settings.fileType) {
             default :
             case Settings::NGINX_ACCESS_LOG :
@@ -87,9 +94,6 @@ int main(int argc, char **argv) {
         if (requestUri.empty()) {
             continue;
         }
-        if (++count % 100 == 0) {
-            std::cout<<"get request uri count:" << count << std::endl;
-        }
         pthread_mutex_lock(&settings.mutex);
         if (bufferSize <= requestQueue.size()) {
             pthread_cond_broadcast(&settings.fullCond);
@@ -97,6 +101,12 @@ int main(int argc, char **argv) {
         }
         requestQueue.push(requestUri);
         pthread_mutex_unlock(&settings.mutex); 
+        settings.startTimer();
+        ++ count;
+        std::cout<<"count:" << count << " :" << requestUri << std::endl;
+        if (count % 100 == 0) {
+            std::cout<<"get request uri count:" << count << std::endl;
+        }
     }
 
     pthread_mutex_lock(&settings.mutex);
@@ -109,6 +119,9 @@ int main(int argc, char **argv) {
     std::cout<<"total request uri get:" << count << std::endl;
     std::cout<<"total request uri sent succ:" << settings.totalSendSucc << std::endl;
     std::cout<<"total request uri sent fail:" << settings.totalSendFail << std::endl;
+    uint64_t time = settings.getTimeCost();
+    std::cout<<"total time cost: " << time / 1000000 <<" seconds, " 
+        << time % 1000000 << " microseconds" <<std::endl;
     sourceFile.close();
     exit(0);
     //threadPool.stopAll();

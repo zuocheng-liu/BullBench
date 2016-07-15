@@ -17,8 +17,12 @@ void BullBenchThread::run() {
         if (succ > 0) _settings.totalSendSucc ++;
         if (succ < 0) _settings.totalSendFail ++;
         if (succ > 0 && _settings.totalSendSucc % 1000 == 0) {
-            std::cout<<"send request uri count:" << _settings.totalSendSucc << std::endl;
+            uint64_t time = _settings.getTimeCost();
+            std::cout<<"send request uri count:" << _settings.totalSendSucc
+                <<"time cost: " << time / 1000000 <<" seconds, " 
+                << time % 1000000 << " microseconds" <<std::endl;
         }
+        succ = 0;
         if (_requestQueue.empty()) {
             if (_settings.stop) {
                 pthread_mutex_unlock(&_settings.mutex);

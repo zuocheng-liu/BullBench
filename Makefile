@@ -9,7 +9,7 @@ LIBDIR=
 
 LIB= -lpthread
 
-FLAG= ${LIBDIR} ${LIB} ${INC}
+FLAG= ${LIBDIR} ${LIB} ${INC} -g -O2 -Wall -Wextra -DNDEBUG
 
 $(shell if [ ! -d bin ]; then mkdir bin; fi)
 $(shell if [ ! -d compile ]; then mkdir compile; fi)

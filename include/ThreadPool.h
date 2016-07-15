@@ -7,7 +7,7 @@ class ThreadPool {
     public :
         typedef std::vector<Thread *> ThreadTypePtrContainer;
         
-        ThreadPool() : _idle(0), _threadNum(0) {}
+        ThreadPool() : _threadNum(0), _idle(0) {}
 
         ~ThreadPool() {}
 

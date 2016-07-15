@@ -18,6 +18,10 @@ void Settings::processParams(int argc, char **argv) {
         switch (c) {
             case 'f' :
                 fileName.assign(optarg);
+                if (fileName.empty()) {
+                    std::cerr <<"Fatal: Illegal file name"<< fileType << std::endl;
+                    exit(-1);
+                }
                 break;
             case 'H' :
                 host.assign(optarg);

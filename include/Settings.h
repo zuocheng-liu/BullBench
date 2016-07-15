@@ -5,6 +5,7 @@
 #include <pthread.h>
 #include <netinet/in.h> 
 #include <regex.h> 
+#include <sys/time.h> 
 
 #include <string>
 
@@ -43,16 +44,24 @@ class Settings {
         
         uint32_t totalSendSucc;      
         uint32_t totalSendFail;      
+        
+        uint64_t timer;
 
         Settings() : 
+            fileName(""),
             fileType(NGINX_ACCESS_LOG),
+            ip(""),
+            port(80),
+            portString("80"),
+            serverName(""),
+            host(""),
+            urlPrefix(""),
+            domainName(""),
             threadNum(DEFAULT_THREAD_NUM), 
-            port(80), 
             stop(false),
             totalSendSucc(0),
             totalSendFail(0) {
 
-            portString = "80";
             memset(&ad, 0, sizeof(ad));
             
             pthread_mutex_init(&mutex, NULL);
@@ -68,7 +77,17 @@ class Settings {
             regfree(&reg);
         }
         
-        void processParams(int argc, char **argv);       
+        void processParams(int argc, char **argv);
+        inline void startTimer() {
+            timeval tv;
+            gettimeofday(&tv,NULL);
+            timer = 1000000 * tv.tv_sec + tv.tv_usec;
+        }
+        inline uint64_t getTimeCost() {
+            timeval tv;
+            gettimeofday(&tv,NULL);
+            return 1000000 * tv.tv_sec + tv.tv_usec - timer;
+        } 
     private :
         void _usage(); 
 }; // end class Settings
