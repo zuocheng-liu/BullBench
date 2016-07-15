@@ -18,7 +18,8 @@ void BullBenchThread::run() {
         if (succ < 0) _settings.totalSendFail ++;
         if (succ > 0 && _settings.totalSendSucc % 100 == 0) {
             uint64_t time = _settings.getTimeCost();
-            std::cout<<"send request uri count:" << _settings.totalSendSucc
+            std::cout<<"send request url succ count:" << _settings.totalSendSucc
+                <<"\tfail count:" << _settings.totalSendFail
                 <<"\ttime cost: " << time / 1000000 <<" seconds, " 
                 << time % 1000000 << " microseconds" <<std::endl;
         }
