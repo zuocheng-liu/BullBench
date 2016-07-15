@@ -74,6 +74,7 @@ int main(int argc, char **argv) {
     }
     threadPool.startAll();
     
+    settings.startTimer();
     while( ! sourceFile.eof() ) {
         std::string line;
         getline(sourceFile, line);
@@ -101,9 +102,8 @@ int main(int argc, char **argv) {
         }
         requestQueue.push(requestUri);
         pthread_mutex_unlock(&settings.mutex); 
-        settings.startTimer();
         ++ count;
-        if (count % 100 == 0) {
+        if (count % 1000 == 0) {
             std::cout<<"get request uri count:" << count << std::endl;
         }
     }
