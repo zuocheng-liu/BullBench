@@ -103,7 +103,6 @@ int main(int argc, char **argv) {
         pthread_mutex_unlock(&settings.mutex); 
         settings.startTimer();
         ++ count;
-        std::cout<<"count:" << count << " :" << requestUri << std::endl;
         if (count % 100 == 0) {
             std::cout<<"get request uri count:" << count << std::endl;
         }
