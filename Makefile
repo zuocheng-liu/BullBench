@@ -11,6 +11,8 @@ LIB= -lpthread
 
 FLAG= ${LIBDIR} ${LIB} ${INC}
 
+$(shell if [ ! -d bin ]; then mkdir bin; fi)
+$(shell if [ ! -d compile ]; then mkdir compile; fi)
 
 TARGET=bin/bullbench
 SRCS=$(wildcard src/*.cpp)

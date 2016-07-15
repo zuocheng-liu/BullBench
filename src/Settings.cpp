@@ -14,7 +14,7 @@ void Settings::processParams(int argc, char **argv) {
         _usage();
         exit(0);
     }
-    while ((c = getopt(argc, argv, "hf:H:u:c:t:")) != -1) {
+    while ((c = getopt(argc, argv, "hf:H:u:c:t:r:o:")) != -1) {
         switch (c) {
             case 'f' :
                 fileName.assign(optarg);
@@ -30,6 +30,19 @@ void Settings::processParams(int argc, char **argv) {
                 if (threadNum <= 0) {
                     threadNum = DEFAULT_THREAD_NUM;
                 }
+                break;
+            case 't' :
+                fileType = atoi(optarg);
+                if (fileType != NGINX_ACCESS_LOG && fileType != OTHER_FILE_TYPE) {
+                    std::cerr <<"Fatal: Illegal file type"<< fileType << std::endl;
+                    exit(-1);
+                }
+                break;
+            case 'r' :
+                regularExpression.assign(optarg);
+                break;
+            case 'o' :
+                replacementUri.assign(optarg);
                 break;
             case 'h' :
                 _usage();
@@ -101,6 +114,16 @@ void Settings::processParams(int argc, char **argv) {
     }
     ad.sin_family = AF_INET;
     ad.sin_port = htons((unsigned short)port);
+
+    // compile regular expression
+    if (!regularExpression.empty()) {
+        int  iret = 0; 
+        iret = regcomp(&reg, regularExpression.c_str(), REG_EXTENDED|REG_NEWLINE);
+        if (iret != 0) {
+            std::cerr <<"Fatal: Invalid regular expression :"<< regularExpression << std::endl;
+            exit(-1);
+        }
+    }
 }
 
 void Settings::_usage() {
@@ -110,11 +133,13 @@ void Settings::_usage() {
         << std::endl << "-u <url>      request url prefix, unsuport https, such as http://www.bullsoft.org"
         << std::endl << "-H <host>     http request header Host, default is NULL"
         << std::endl << "-c <num>      the number of concurrent threads, default is 100"
+        << std::endl << "-r <regex>    regex expression, used to extract request string from file. When use regex,'-t 0' is nessessary!"
+        << std::endl << "-o <string>   uri with regex expression captured groups, supports $0-$9"
         << std::endl << "-h            print this help and exit"
         << std::endl
-        //<< std::endl printf("-r            regex expression, used to extract request string from log file \n"); 
-        << std::endl << "Examples 1:   ./boolbench -f /var/log/nginx/access.log -u http://127.0.0.1:8080"
-        << std::endl << "Examples 2:   ./boolbench -f /var/log/nginx/access.log -u http://127.0.0.1:8080 -H www.bullsoft.org" 
+        << std::endl << "Example 1:  ./bullbench -f /var/log/nginx/access.log -u http://127.0.0.1:8080"
+        << std::endl << "Example 2:  ./bullbench -f /var/log/nginx/access.log -u http://127.0.0.1:8080 -H www.bullsoft.org" 
+        << std::endl << "Example 3:  ./bullbench -f /var/log/nginx/access.log -u http://127.0.0.1:8080 -t 0 -r \"[a-z]*([0-9]+)([a-z]*)\" -o \"/display?a=\\$1&b=\\$2\"" 
         << std::endl;
 }
 
