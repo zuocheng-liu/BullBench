@@ -13,7 +13,7 @@
 
 class Settings {
     public :
-        const static uint32_t DEFAULT_THREAD_NUM = 100;
+        const static uint32_t DEFAULT_THREAD_NUM = 1000;
         
         typedef enum {
             OTHER_FILE_TYPE = 0,

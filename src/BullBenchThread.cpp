@@ -16,7 +16,7 @@ void BullBenchThread::run() {
         pthread_mutex_lock(&_settings.mutex);
         if (succ > 0) _settings.totalSendSucc ++;
         if (succ < 0) _settings.totalSendFail ++;
-        if (succ > 0 && _settings.totalSendSucc % 100 == 0) {
+        if (succ > 0 && _settings.totalSendSucc % 1000 == 0) {
             uint64_t time = _settings.getTimeCost();
             std::cout<<"send request url succ count:" << _settings.totalSendSucc
                 <<"\tfail count:" << _settings.totalSendFail

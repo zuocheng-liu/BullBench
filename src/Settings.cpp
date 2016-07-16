@@ -136,7 +136,7 @@ void Settings::_usage() {
         << std::endl << "-t <num>      request file type, 1 for nginx access log, 0 for others , default is 1"
         << std::endl << "-u <url>      request url prefix, unsuport https, such as http://www.bullsoft.org"
         << std::endl << "-H <host>     http request header Host, default is NULL"
-        << std::endl << "-c <num>      the number of concurrent threads, default is 100"
+        << std::endl << "-c <num>      the number of concurrent threads, default is 1000"
         << std::endl << "-r <regex>    regex expression, used to extract request string from file. When use regex,'-t 0' is nessessary!"
         << std::endl << "-o <string>   uri with regex expression captured groups, supports $0-$9"
         << std::endl << "-h            print this help and exit"
