@@ -67,38 +67,38 @@ void BullBenchThread::run() {
 }
 
 void BullBenchThread::buildRequest(char* request,std::string& uri) {
-            //Five_comment: same as memset bytes to sezo('\0')
-            bzero(request,REQUEST_SIZE);
-            
-            strcpy(request,"GET");
-            strcat(request," ");
-            
-            if (_settings.host.empty()) {
-                strcat(request, (char *)uri.c_str());
-            } else {
-                strcat(request, (char *)_settings.urlPrefix.c_str());
-                strcat(request, (char *)uri.c_str());
-            }
+    //Five_comment: same as memset bytes to sezo('\0')
+    bzero(request,REQUEST_SIZE);
 
-            // detemine which http version
-            strcat(request," HTTP/1.1");
-            strcat(request,"\r\n");
-            strcat(request,"User-Agent: "PROGRAM_NAME" "PROGRAM_VERSION"\r\n");
-            strcat(request,"Host: ");
-            if (_settings.host.empty()) {
-                if (80 == _settings.port) {
-                    strcat(request, _settings.domainName.c_str());
-                } else {
-                    strcat(request, (_settings.domainName + ":" + _settings.portString).c_str());
-                }
-            } else {
-                strcat(request, _settings.host.c_str());
-            }
-            strcat(request,"\r\n");
-            strcat(request,"Pragma: no-cache\r\n");
-            strcat(request,"Connection: close\r\n");
-            //strcat(request,"Connection: keep-alive\r\n");
-            strcat(request,"Keep-Alive: timeout=20\r\n");
-            strcat(request,"\r\n"); 
+    strcpy(request,"GET");
+    strcat(request," ");
+
+    if (_settings.host.empty()) {
+        strcat(request, (char *)uri.c_str());
+    } else {
+        strcat(request, (char *)_settings.urlPrefix.c_str());
+        strcat(request, (char *)uri.c_str());
+    }
+
+    // detemine which http version
+    strcat(request," HTTP/1.1");
+    strcat(request,"\r\n");
+    strcat(request,"User-Agent: "PROGRAM_NAME" "PROGRAM_VERSION"\r\n");
+    strcat(request,"Host: ");
+    if (_settings.host.empty()) {
+        if (80 == _settings.port) {
+            strcat(request, _settings.domainName.c_str());
+        } else {
+            strcat(request, (_settings.domainName + ":" + _settings.portString).c_str());
         }
+    } else {
+        strcat(request, _settings.host.c_str());
+    }
+    strcat(request,"\r\n");
+    strcat(request,"Pragma: no-cache\r\n");
+    strcat(request,"Connection: close\r\n");
+    //strcat(request,"Connection: keep-alive\r\n");
+    strcat(request,"Keep-Alive: timeout=20\r\n");
+    strcat(request,"\r\n"); 
+}
 
