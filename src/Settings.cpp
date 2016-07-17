@@ -143,7 +143,7 @@ void Settings::_usage() {
         << std::endl
         << std::endl << "Example 1:  ./bullbench -f /var/log/nginx/access.log -u http://127.0.0.1:8080"
         << std::endl << "Example 2:  ./bullbench -f /var/log/nginx/access.log -u http://127.0.0.1:8080 -H www.bullsoft.org" 
-        << std::endl << "Example 3:  ./bullbench -f /var/log/nginx/access.log -u http://127.0.0.1:8080 -t 0 -r \"[a-z]*([0-9]+)([a-z]*)\" -o \"/display?a=\\$1&b=\\$2\"" 
+        << std::endl << "Example 3:  ./bullbench -f data_file.log -u http://127.0.0.1:8080 -t 0 -r \"[a-z]*([0-9]+)([a-z]*)\" -o \"/display?a=\\$1&b=\\$2\"" 
         << std::endl;
 }
 
