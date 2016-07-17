@@ -48,7 +48,7 @@
 执行 ./bin/bullbench -h 有详细说明和使用实例
 
 ```
-        BoolBench 1.0
+        BullBench 1.0
     
         -f <filename> 包含请求的文件，可以是nginx access log，也可以是自定义的数据文件
         -t <num>      请求文件的类型, 1 是 nginx access log, 0 其他 其他, 默认是 1

@@ -2,7 +2,7 @@
 #define BULLBENCH_BULLBENCH_H
 
 #define PROGRAM_VERSION "1.0"
-#define PROGRAM_NAME "BoolBench"
+#define PROGRAM_NAME "BullBench"
 
 
 #endif
