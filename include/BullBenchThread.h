@@ -1,6 +1,7 @@
 #ifndef BULLBENCH_BULLBENCHTHREAD_H
 #define BULLBENCH_BULLBENCHTHREAD_H
 
+#include <sys/socket.h>
 #include <queue>
 
 #include "Thread.h"
