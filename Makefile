@@ -1,16 +1,15 @@
 CXX=g++
-CXXLD=${CXX} -o 
+LD=${CXX}
+
 BASE_DIR= .
 BASE_INC= ${BASE_DIR}/include
 
 INC= -I${BASE_INC} 
 
 LIBDIR=
-
 LIB= -lpthread
 
-FLAG= ${INC} -g -O2 -Wall -Wextra -DNDEBUG
-
+CFLAG= ${INC} -g -O2 -Wall -Wextra -DNDEBUG
 LDFLAG= ${LIBDIR} ${LIB}
 
 $(shell if [ ! -d bin ]; then mkdir bin; fi)
@@ -24,10 +23,10 @@ OBJS=$(patsubst %.cpp, compile/%.o, $(SRCSNOTDIR))
 .PHONY: clean test
 
 $(TARGET):$(OBJS)
-	${CXXLD} $@ $^ ${FLAG} ${LDFLAG}
+	${LD} -o $@ $^ ${LDFLAG}
 
 compile/%.o:src/%.cpp
-	${CXX} -o $@ -c $< ${FLAG} 
+	${CXX} -o $@ -c $< ${CFLAG} 
 
 clean :
 	rm -rf $(TARGET) $(OBJS) 
