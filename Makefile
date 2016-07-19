@@ -9,7 +9,9 @@ LIBDIR=
 
 LIB= -lpthread
 
-FLAG= ${LIBDIR} ${LIB} ${INC} -g -O2 -Wall -Wextra -DNDEBUG
+FLAG= ${INC} -g -O2 -Wall -Wextra -DNDEBUG
+
+LDFLAG= ${LIBDIR} ${LIB}
 
 $(shell if [ ! -d bin ]; then mkdir bin; fi)
 $(shell if [ ! -d compile ]; then mkdir compile; fi)
@@ -22,7 +24,7 @@ OBJS=$(patsubst %.cpp, compile/%.o, $(SRCSNOTDIR))
 .PHONY: clean test
 
 $(TARGET):$(OBJS)
-	${CXXLD} $@ $^ ${FLAG} 
+	${CXXLD} $@ $^ ${FLAG} ${LDFLAG}
 
 compile/%.o:src/%.cpp
 	${CXX} -o $@ -c $< ${FLAG} 
