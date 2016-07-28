@@ -21,6 +21,16 @@ class BullBenchThread : public Thread {
             if (sock < 0) {
                 return -1;
             }
+
+            // avoid TIME_WAIT status
+            int flags =1;
+            setsockopt(sfd, SOL_SOCKET, SO_REUSEADDR, &flags, sizeof(flags));
+            struct linger ling = {0, 0};
+            setsockopt(sfd, SOL_SOCKET, SO_LINGER, &ling, sizeof(ling));
+            
+            // setsockopt(sfd, SOL_SOCKET, SO_KEEPALIVE, &flags, sizeof(flags));
+            setsockopt(sfd, IPPROTO_TCP, TCP_NODELAY, &flags, sizeof(flags));
+
             if (connect(sock, (struct sockaddr *)&(_settings.ad), sizeof(_settings.ad)) < 0) {
                 return -1;
             }
