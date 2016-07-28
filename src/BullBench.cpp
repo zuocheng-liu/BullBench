@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <pthread.h>
+#include <sys/resource.h> 
+#include <errno.h>
 
 #include <fstream>
 #include <iostream>
@@ -56,6 +58,17 @@ void getUriAccordingToRegExp(regex_t& regexCompiled, std::string& line, std::str
 }
 
 int main(int argc, char **argv) {
+    struct rlimit rlim;
+    if (getrlimit(RLIMIT_NOFILE, &rlim) < 0) {
+        std::cerr<<"Can not get rlimit, " << strerror(errno) << std::endl;
+        exit(-1);
+    }
+    rlim.rlim_cur = rlim.rlim_max;
+    if (setrlimit(RLIMIT_NOFILE, &rlim) < 0) {
+        std::cerr<<"Can not set rlimit, " << strerror(errno) << std::endl;
+        exit(-1);
+    } 
+
     Settings settings;
     settings.processParams(argc, argv);
     std::queue<std::string> requestQueue;
