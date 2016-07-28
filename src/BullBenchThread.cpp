@@ -1,6 +1,7 @@
 #include <string.h>
 #include <sys/socket.h>
 #include <unistd.h>
+#include <errno.h>
 
 #include <cstdlib>
 #include <queue>
@@ -46,7 +47,7 @@ void BullBenchThread::run() {
         int sock = _getSocket();
         if (sock < 0) {
             std::cerr << "Error: sock fail :" 
-                << _settings.domainName << ':' << _settings.port << std::endl;
+                << _settings.domainName << ':' << _settings.port << strerror(errno) << std::endl;
             succ = -1;
             continue;
         }
