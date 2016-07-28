@@ -6,6 +6,7 @@
 #include <cstdlib>
 #include <queue>
 #include <iostream>
+#include <sstream>
 #include "BullBenchThread.h"
 #include "BullBench.h"
 
@@ -46,14 +47,19 @@ void BullBenchThread::run() {
 
         int sock = _getSocket();
         if (sock < 0) {
-            std::cerr << "Error: sock fail :" 
-                << _settings.domainName << ':' << _settings.port << strerror(errno) << std::endl;
+            std::stringstream ss;
+            ss << "Error: sock fail:" 
+                << _settings.domainName << ':' << _settings.port 
+                << "\t" << strerror(errno) << std::endl;
+            std::cerr << ss.str();
             succ = -1;
             continue;
         }
         if(rlen!=write(sock,request,rlen)) {
             close(sock);
-            std::cerr<<"Error: write fail :" << std::endl;
+            std::stringstream ss;
+            ss << "Error: write fail :" << std::endl;
+            std::cerr << ss.str();
             succ = -1;
             continue;
         }
