@@ -2,6 +2,8 @@
 #define BULLBENCH_BULLBENCHTHREAD_H
 
 #include <sys/socket.h>
+#include <netinet/tcp.h> // for TCP_NODELAY
+
 #include <queue>
 
 #include "Thread.h"
@@ -21,6 +23,16 @@ class BullBenchThread : public Thread {
             if (sock < 0) {
                 return -1;
             }
+
+            // avoid TIME_WAIT status
+            int flags =1;
+            setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, &flags, sizeof(flags));
+            struct linger ling = {0, 0};
+            setsockopt(sock, SOL_SOCKET, SO_LINGER, &ling, sizeof(ling));
+            
+            // setsockopt(sfd, SOL_SOCKET, SO_KEEPALIVE, &flags, sizeof(flags));
+            setsockopt(sock, IPPROTO_TCP, TCP_NODELAY, &flags, sizeof(flags));
+
             if (connect(sock, (struct sockaddr *)&(_settings.ad), sizeof(_settings.ad)) < 0) {
                 return -1;
             }
